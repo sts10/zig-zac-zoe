@@ -26,13 +26,15 @@ pub fn main() void {
     // var game_over: bool = false;
     // var turn_number = 0;
     var board = [9]u8{ 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    for (board) |space| {
+    for (board) |space, j| {
         std.debug.print("{}", .{space});
-        // if (j > 0) && (j + 1) % 3 == 0  {
-        //     std.debug.print("\n");
-        // } else {
-        //     std.debug.print(" | ");
-        // }
+        // std.debug.print(" | ", .{});
+
+        if ((j > 0) AND ((j + 1) % 3 == 0)) {
+            std.debug.print("\n", .{});
+        } else {
+            std.debug.print(" | ", .{});
+        }
     }
 }
 
