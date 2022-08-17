@@ -28,9 +28,8 @@ pub fn main() void {
     var board = [9]u8{ 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     for (board) |space, j| {
         std.debug.print("{}", .{space});
-        // std.debug.print(" | ", .{});
 
-        if ((j > 0) AND ((j + 1) % 3 == 0)) {
+        if (j > 0 and (j + 1) % 3 == 0) {
             std.debug.print("\n", .{});
         } else {
             std.debug.print(" | ", .{});
