@@ -17,13 +17,18 @@ pub fn main() void {
         } else {
             player_number = 2;
         }
-        // ask_user() may return either an usize for an error called an "error union type"
-        // https://ziglang.org/documentation/0.9.1/#toc-Error-Union-Type
-        // There are a number of ways to handle this type of error, though since we're in main, we
-        // can't bubble the error up anywhere.
-        // For now I'm going to do the equivalent of .unwrap_or(0)
-        var num = ask_user() catch 0;
-        // std.debug.print("You entered {}\n", .{num});
+        var num: usize = 0;
+        if (player_number == 1) {
+            // ask_user() may return either an usize for an error called an "error union type"
+            // https://ziglang.org/documentation/0.9.1/#toc-Error-Union-Type
+            // There are a number of ways to handle this type of error, though since we're in main, we
+            // can't bubble the error up anywhere.
+            // For now I'm going to do the equivalent of .unwrap_or(0)
+            num = ask_user() catch 0;
+            // std.debug.print("You entered {}\n", .{num});
+        } else {
+            num = findRandomOpenMove(board);
+        }
 
         board = execute_player_move(num, player_number, board);
         presentBoard(board);
@@ -113,6 +118,27 @@ fn presentBoard(board: [9]u8) void {
             std.debug.print(" | ", .{});
         }
     }
+}
+
+const RndGen = std.rand.DefaultPrng;
+var rnd = RndGen.init(0);
+fn pickRandomNumber(max: usize) usize {
+    var number = @mod(rnd.random().int(usize), max);
+    std.debug.print("Picking {}\n", .{number});
+    return number;
+}
+
+fn findRandomOpenMove(board: [9]u8) usize {
+    var move: usize = pickRandomNumber(8);
+    while (true) {
+        if (board[move] == 0) {
+            break;
+        } else {
+            std.debug.print("{} isn't free?\n", .{move});
+            move = pickRandomNumber(8);
+        }
+    }
+    return move;
 }
 
 // Copied this wholesale from a SO answer. Don't feel good about
