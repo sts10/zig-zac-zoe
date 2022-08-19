@@ -5,18 +5,18 @@ Writing a very basic command-line tic-toe-game in [Zig](https://ziglang.org) as 
 Previously, I did this in [Rust](https://github.com/sts10/rusty-tac) and [Go](https://github.com/sts10/tic-tac-go) as [a learning exercise in those two languages](https://sts10.github.io/2017/11/18/trying-go-and-rust.html).
 
 ## Installing Zig
-I went with the snap install (`snap install zig --classic --beta`) as listed in [Zig's GitHub wiki](https://github.com/ziglang/zig/wiki/Install-Zig-from-a-Package-Manager).
+I went with the snap install (`snap install zig --classic --beta`) as listed in [Zig's GitHub wiki](https://github.com/ziglang/zig/wiki/Install-Zig-from-a-Package-Manager). Running v0.9.1 for now.
 
-## Docs
+## The Zig docs
 * [Docs for v 0.9.1](https://ziglang.org/documentation/0.9.1/)
 <!-- https://ziglang.org/documentation/master/std/#root -->
 
-## Guides
+## Zig guides
 * [Zig learn](https://ziglearn.org/)
 * [Zig by example](https://zig-by-example.com/)
 
-## Exercises
-* [Ziglings](https://github.com/ratfactor/ziglings)
+## Zig exercises
+* [Ziglings](https://github.com/ratfactor/ziglings) (think this requires an edge version of Zig?)
 
 ## Videos
 * [A long video from a beginner coming from Rust](https://www.youtube.com/watch?v=O4UYT-brgrc)
