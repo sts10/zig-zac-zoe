@@ -12,7 +12,7 @@ pub fn main() void {
     while (game_over != true) : (turn_number += 1) {
         // Not sure if this is good Zig...
         var player_number: u8 = 0;
-        if (turn_number % 2 == 1) {
+        if (turn_number % 2 == 0) {
             player_number = 1;
         } else {
             player_number = 2;
