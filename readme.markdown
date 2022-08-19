@@ -7,12 +7,16 @@ Previously, I did this in [Rust](https://github.com/sts10/rusty-tac) and [Go](ht
 ## Installing Zig
 I went with the snap install (`snap install zig --classic --beta`) as listed in [Zig's GitHub wiki](https://github.com/ziglang/zig/wiki/Install-Zig-from-a-Package-Manager). Running v0.9.1 for now.
 
+## Running this thing
+
+Run program with `zig build run`. Most of the code work is in `src/main.zig`.
+
 ## The Zig docs
 * [Docs for v 0.9.1](https://ziglang.org/documentation/0.9.1/)
 <!-- https://ziglang.org/documentation/master/std/#root -->
 
 ## Zig guides
-* [Zig learn](https://ziglearn.org/)
+* [ziglearn.org](https://ziglearn.org/)
 * [Zig by example](https://zig-by-example.com/)
 
 ## Zig exercises
