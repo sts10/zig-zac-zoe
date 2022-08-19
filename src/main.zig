@@ -2,7 +2,7 @@
 const std = @import("std");
 
 pub fn main() void {
-    std.debug.print("Let's play... Zig Zac Zoe!", .{});
+    std.debug.print("Let's play... Zig Zac Zoe!\n\n", .{});
 
     var board = [9]u8{ 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     presentBoard(board);
@@ -23,7 +23,7 @@ pub fn main() void {
         // can't bubble the error up anywhere.
         // For now I'm going to do the equivalent of .unwrap_or(0)
         var num = ask_user() catch 0;
-        std.debug.print("You entered {}\n", .{num});
+        // std.debug.print("You entered {}\n", .{num});
 
         board = execute_player_move(num, player_number, board);
         presentBoard(board);
@@ -35,19 +35,17 @@ pub fn main() void {
             std.debug.print("Player 2 wins!\n", .{});
             game_over = true;
         }
+
+        if (checkIfBoardIsFull(board)) {
+            std.debug.print("Board is full! It's a draw.\n", .{});
+            game_over = true;
+        }
     }
 }
 
-// I think this is the right way to write a function that chagnes an array
+// I think this is the right way to write a function that changes an array
 // https://ziglang.org/documentation/0.6.0/#Pass-by-value-Parameters
-// fn changeBoard(board: [9]u8) [9]u8 {
-//     var new_board = board;
-//     new_board[0] = 100;
-//     return new_board;
-// }
-
-// I think this is the right way to write a function that chagnes an array
-// https://ziglang.org/documentation/0.6.0/#Pass-by-value-Parameters
+// I knid of like it, especially compared to the myriad of choices you face writing Rust!
 fn execute_player_move(this_move_position: usize, player_number: u8, board: [9]u8) [9]u8 {
     var new_board = board;
     if (new_board[this_move_position] == 0) {
@@ -88,6 +86,15 @@ fn checkForWinningPlayer(board: [9]u8) u8 {
     return 0;
 }
 
+fn checkIfBoardIsFull(board: [9]u8) bool {
+    var board_sum: u8 = 0;
+    for (board) |this_space| {
+        board_sum += this_space;
+    }
+
+    return board_sum == 54;
+}
+
 // Setting void as thje return type basically says we're not going to return anything
 fn presentBoard(board: [9]u8) void {
     for (board) |space, j| {
@@ -117,7 +124,7 @@ fn ask_user() !usize {
 
     var buf: [10]u8 = undefined;
 
-    try stdout.print("A number please: ", .{});
+    try stdout.print("Make your move! ", .{});
 
     if (try stdin.readUntilDelimiterOrEof(buf[0..], '\n')) |user_input| {
         return std.fmt.parseInt(usize, user_input, 10);
