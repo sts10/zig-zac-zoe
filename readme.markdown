@@ -1,6 +1,6 @@
 # Zig Zac Zoe
 
-Writing a very basic command-line tic-toe-game in [Zig](https://ziglang.org) as a way of learning the very basics of the language.
+Writing a very basic command-line tic-tac-toe game in [Zig](https://ziglang.org) as a way of learning the very basics of the language.
 
 Previously, I did this in [Rust](https://github.com/sts10/rusty-tac) and [Go](https://github.com/sts10/tic-tac-go) as [a learning exercise in those two languages](https://sts10.github.io/2017/11/18/trying-go-and-rust.html).
 
@@ -9,7 +9,7 @@ I went with the snap install (`snap install zig --classic --beta`) as listed in 
 
 ## Running this thing
 
-Run program with `zig build run`. Most of the code work is in `src/main.zig`.
+Run my program with `zig build run`. Most of the code work is in `src/main.zig`.
 
 ## The Zig docs
 * [Docs for v 0.9.1](https://ziglang.org/documentation/0.9.1/)
@@ -23,4 +23,4 @@ Run program with `zig build run`. Most of the code work is in `src/main.zig`.
 * [Ziglings](https://github.com/ratfactor/ziglings) (think this requires an edge version of Zig?)
 
 ## Videos
-* [A long video from a beginner coming from Rust](https://www.youtube.com/watch?v=O4UYT-brgrc)
+* [A long video of a beginner Zig programmer who's coming from Rust](https://www.youtube.com/watch?v=O4UYT-brgrc)
