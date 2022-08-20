@@ -33,13 +33,18 @@ pub fn main() void {
 
         board = execute_player_move(num, player_number, board);
         presentBoard(board);
+        // checkForWinningPlayer returns an "optional", which I take to be kind of like Rust Options
+        // https://ziglearn.org/chapter-1/#optionals
+        // Though it looks like you have to check for null _first_?
         var winner = checkForWinningPlayer(board);
-        if (winner == 1) {
-            std.debug.print("Player 1 wins!\n", .{});
-            game_over = true;
-        } else if (winner == 2) {
-            std.debug.print("Player 2 wins!\n", .{});
-            game_over = true;
+        if (winner != null) {
+            if (winner.? == 1) {
+                std.debug.print("Player 1 wins!\n", .{});
+                game_over = true;
+            } else if (winner.? == 2) {
+                std.debug.print("Player 2 wins!\n", .{});
+                game_over = true;
+            }
         }
 
         if (checkIfBoardIsFull(board)) {
@@ -79,17 +84,19 @@ fn calcSums(board: [9]u8) [8]u8 {
     return sums;
 }
 
-fn checkForWinningPlayer(board: [9]u8) u8 {
+// checkForWinningPlayer returns an "optional", which I take to be kind of like Rust Options
+// https://ziglearn.org/chapter-1/#optionals
+fn checkForWinningPlayer(board: [9]u8) ?u8 {
+    var winner: ?u8 = null;
     const sums = calcSums(board);
     for (sums) |sum| {
         if (sum == 3) {
-            return 1;
+            winner = 1;
         } else if (sum == 30) {
-            return 2;
+            winner = 2;
         }
     }
-    // No winner yet!
-    return 0;
+    return winner;
 }
 
 fn checkIfBoardIsFull(board: [9]u8) bool {
