@@ -17,21 +17,32 @@ pub fn main() void {
         } else {
             player_number = 2;
         }
-        var num: usize = 0;
+        var move_to_make: usize = 0;
         if (player_number == 1) {
-            // askUser() may return either an usize for an error called an "error union type"
-            // https://ziglang.org/documentation/0.9.1/#toc-Error-Union-Type
-            // There are a number of ways to handle this type of error, though since we're in main, we
-            // can't bubble the error up anywhere.
-            // For now I'm going to do the equivalent of .unwrap_or(0)
-            num = askUser() catch 0;
-            // std.debug.print("You entered {}\n", .{num});
+            var validMove = false;
+            while (!validMove) {
+                // askUser() may return either an usize or an error (if Zig was unable to
+                // parse entered character as a usize).
+                // Note: This "either value or error" type is called an "error union type" in Zig
+                // https://ziglang.org/documentation/0.9.1/#toc-Error-Union-Type
+                // We'll handle it with an if/else.
+                // if we got a value (move) back, we'll change validMove to true and
+                // assign this chosen move value to move_to_make
+                if (askUser()) |move| {
+                    validMove = true;
+                    move_to_make = move;
+                } else |err| {
+                    std.debug.print("Error: {}; try again.\n", .{err});
+                }
+            }
         } else {
-            // num = findRandomOpenMove(board);
-            num = alfredPick(board);
+            // move_to_make = findRandomOpenMove(board);
+            move_to_make = alfredPick(board) catch {
+                std.debug.panic("Error: Can't find a valid move!\n", .{});
+            };
         }
 
-        board = execute_player_move(num, player_number, board);
+        board = execute_player_move(move_to_make, player_number, board);
         presentBoard(board);
         // checkForWinningPlayer returns an "optional", which I take to be kind of like Rust Options
         // https://ziglearn.org/chapter-1/#optionals
@@ -162,9 +173,15 @@ fn isOpen(desired_move: usize, board: [9]u8) bool {
     }
 }
 
+const MoveError = error{
+    NoOpenOfThree,
+    OutOfBounds,
+    AlreadyOccupied,
+    Unreadable,
+};
 // Given 3 usizes representing spaces on the board, find the first that
 // is open
-fn findAnOpenOfThree(a: usize, b: usize, c: usize, board: [9]u8) usize {
+fn findAnOpenOfThree(a: usize, b: usize, c: usize, board: [9]u8) !usize {
     if (isOpen(a, board)) {
         return a;
     } else if (isOpen(b, board)) {
@@ -172,7 +189,9 @@ fn findAnOpenOfThree(a: usize, b: usize, c: usize, board: [9]u8) usize {
     } else if (isOpen(c, board)) {
         return c;
     } else {
-        return 11; // clearly a cop out... think we're supposed to use an error?
+        // const err: MoveError = error{NoOpenOfThree};
+        const err: MoveError = MoveError.NoOpenOfThree;
+        return err;
     }
 }
 
@@ -196,7 +215,8 @@ fn alfredFindLine(board: [9]u8) usize {
     // If no good moves to choose, just pick randomly
     return findRandomOpenMove(board);
 }
-fn alfredPick(board: [9]u8) usize {
+
+fn alfredPick(board: [9]u8) !usize {
     var line_we_like = alfredFindLine(board);
     var alfred_move = switch (line_we_like) {
         0 => findAnOpenOfThree(2, 4, 6, board),
@@ -208,12 +228,16 @@ fn alfredPick(board: [9]u8) usize {
         6 => findAnOpenOfThree(3, 4, 5, board),
         7 => findAnOpenOfThree(0, 1, 2, board),
         else => findRandomOpenMove(board),
+    } catch {
+        // alfred_move could be an error (though this will actually never happen because of how alfredFindLine works)
+        // so we catch it here, returning (or "bubbling up") the error to be handled higher up.
+        const err: MoveError = MoveError.NoOpenOfThree;
+        return err;
     };
     return alfred_move;
 }
 
-// Copied this wholesale from a SO answer. Don't feel good about
-// it...
+// Copied this wholesale from a SO answer. Don't feel good about it...
 // https://stackoverflow.com/a/62077901
 fn askUser() !usize {
     const stdin = std.io.getStdIn().reader();
@@ -226,7 +250,8 @@ fn askUser() !usize {
     if (try stdin.readUntilDelimiterOrEof(buf[0..], '\n')) |user_input| {
         return std.fmt.parseInt(usize, user_input, 10);
     } else {
-        return @as(usize, 0);
+        const err: MoveError = MoveError.Unreadable;
+        return err;
     }
 }
 
