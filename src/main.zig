@@ -19,22 +19,7 @@ pub fn main() void {
         }
         var move_to_make: usize = 0;
         if (player_number == 1) {
-            var validMove = false;
-            while (!validMove) {
-                // askUser() may return either an usize or an error (if Zig was unable to
-                // parse entered character as a usize).
-                // Note: This "either value or error" type is called an "error union type" in Zig
-                // https://ziglang.org/documentation/0.9.1/#toc-Error-Union-Type
-                // We'll handle it with an if/else.
-                // if we got a value (move) back, we'll change validMove to true and
-                // assign this chosen move value to move_to_make
-                if (askUser()) |move| {
-                    validMove = true;
-                    move_to_make = move;
-                } else |err| {
-                    std.debug.print("Error: {}; try again.\n", .{err});
-                }
-            }
+            move_to_make = askUserForMove();
         } else {
             // move_to_make = findRandomOpenMove(board);
             move_to_make = alfredPick(board) catch {
@@ -115,7 +100,7 @@ fn checkIfBoardIsFull(board: [9]u8) bool {
     for (board) |this_space| {
         board_sum += this_space;
     }
-    return board_sum == 54;
+    return board_sum >= 45;
 }
 
 // Setting void as thje return type basically says we're not going to return anything
@@ -239,19 +224,36 @@ fn alfredPick(board: [9]u8) !usize {
 
 // Copied this wholesale from a SO answer. Don't feel good about it...
 // https://stackoverflow.com/a/62077901
-fn askUser() !usize {
+fn askUserForUsize(prompt: []const u8) !usize {
     const stdin = std.io.getStdIn().reader();
     const stdout = std.io.getStdOut().writer();
 
     var buf: [10]u8 = undefined;
 
-    try stdout.print("Make your move! ", .{});
+    try stdout.print("{s}", .{prompt}); // not entirely sure what this {s} is about...
 
     if (try stdin.readUntilDelimiterOrEof(buf[0..], '\n')) |user_input| {
         return std.fmt.parseInt(usize, user_input, 10);
     } else {
         const err: MoveError = MoveError.Unreadable;
         return err;
+    }
+}
+
+fn askUserForMove() usize {
+    while (true) {
+        // askUserForUsize() may return either an usize or an error (if Zig was unable to
+        // parse entered character as a usize).
+        // Note: This "either value or error" type is called an "error union type" in Zig
+        // https://ziglang.org/documentation/0.9.1/#toc-Error-Union-Type
+        // We'll handle it with an if/else.
+        // if we got a value (move) back, we'll change validMove to true and return move.
+        const prompt: []const u8 = "Make your move! ";
+        if (askUserForUsize(prompt)) |move| {
+            return move;
+        } else |err| {
+            std.debug.print("Error: {}; try again.\n", .{err});
+        }
     }
 }
 
