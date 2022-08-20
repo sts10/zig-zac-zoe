@@ -19,12 +19,12 @@ pub fn main() void {
         }
         var num: usize = 0;
         if (player_number == 1) {
-            // ask_user() may return either an usize for an error called an "error union type"
+            // askUser() may return either an usize for an error called an "error union type"
             // https://ziglang.org/documentation/0.9.1/#toc-Error-Union-Type
             // There are a number of ways to handle this type of error, though since we're in main, we
             // can't bubble the error up anywhere.
             // For now I'm going to do the equivalent of .unwrap_or(0)
-            num = ask_user() catch 0;
+            num = askUser() catch 0;
             // std.debug.print("You entered {}\n", .{num});
         } else {
             // num = findRandomOpenMove(board);
@@ -121,7 +121,6 @@ fn presentBoard(board: [9]u8) void {
 }
 
 fn pickRandomNumber(max: usize) usize {
-
     var prng = std.rand.DefaultPrng.init(blk: {
         var seed: u64 = undefined;
         // Ignoring possible error for code simplicity
@@ -209,7 +208,7 @@ fn alfredPick(board: [9]u8) usize {
 // Copied this wholesale from a SO answer. Don't feel good about
 // it...
 // https://stackoverflow.com/a/62077901
-fn ask_user() !usize {
+fn askUser() !usize {
     const stdin = std.io.getStdIn().reader();
     const stdout = std.io.getStdOut().writer();
 
