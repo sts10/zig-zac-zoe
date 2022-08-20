@@ -19,15 +19,16 @@ pub fn main() void {
         }
         var move_to_make: usize = 0;
         if (player_number == 1) {
-            move_to_make = askUserForMove();
+            move_to_make = askUserForMove(board);
         } else {
-            // move_to_make = findRandomOpenMove(board);
             move_to_make = alfredPick(board) catch {
                 std.debug.panic("Error: Can't find a valid move!\n", .{});
             };
         }
 
-        board = execute_player_move(move_to_make, player_number, board);
+        board = execute_player_move(move_to_make, player_number, board) catch {
+            std.debug.panic("Error making move!\n", .{});
+        };
         presentBoard(board);
         // checkForWinningPlayer returns an "optional", which I take to be kind of like Rust Options
         // https://ziglearn.org/chapter-1/#optionals
@@ -50,10 +51,16 @@ pub fn main() void {
     }
 }
 
+const MoveError = error{
+    NoOpenOfThree,
+    OutOfBounds,
+    AlreadyOccupied,
+    Unreadable,
+};
 // I think this is the right way to write a function that changes an array
 // https://ziglang.org/documentation/0.6.0/#Pass-by-value-Parameters
-// I knid of like it, especially compared to the myriad of choices you face writing Rust!
-fn execute_player_move(this_move_position: usize, player_number: u8, board: [9]u8) [9]u8 {
+// I kind of like it, especially compared to the myriad of choices you face writing Rust!
+fn execute_player_move(this_move_position: usize, player_number: u8, board: [9]u8) ![9]u8 {
     var new_board = board;
     if (new_board[this_move_position] == 0) {
         if (player_number == 1) {
@@ -62,7 +69,8 @@ fn execute_player_move(this_move_position: usize, player_number: u8, board: [9]u
             new_board[this_move_position] = 10;
         }
     } else {
-        std.debug.panic("Position {} is occupied!", .{this_move_position});
+        const err: MoveError = MoveError.AlreadyOccupied;
+        return err;
     }
     return new_board;
 }
@@ -158,12 +166,6 @@ fn isOpen(desired_move: usize, board: [9]u8) bool {
     }
 }
 
-const MoveError = error{
-    NoOpenOfThree,
-    OutOfBounds,
-    AlreadyOccupied,
-    Unreadable,
-};
 // Given 3 usizes representing spaces on the board, find the first that
 // is open
 fn findAnOpenOfThree(a: usize, b: usize, c: usize, board: [9]u8) !usize {
@@ -174,7 +176,6 @@ fn findAnOpenOfThree(a: usize, b: usize, c: usize, board: [9]u8) !usize {
     } else if (isOpen(c, board)) {
         return c;
     } else {
-        // const err: MoveError = error{NoOpenOfThree};
         const err: MoveError = MoveError.NoOpenOfThree;
         return err;
     }
@@ -240,7 +241,7 @@ fn askUserForUsize(prompt: []const u8) !usize {
     }
 }
 
-fn askUserForMove() usize {
+fn askUserForMove(board: [9]u8) usize {
     while (true) {
         // askUserForUsize() may return either an usize or an error (if Zig was unable to
         // parse entered character as a usize).
@@ -250,7 +251,12 @@ fn askUserForMove() usize {
         // if we got a value (move) back, we'll change validMove to true and return move.
         const prompt: []const u8 = "Make your move! ";
         if (askUserForUsize(prompt)) |move| {
-            return move;
+            // Check if this selected move space is open
+            if (isOpen(move, board)) {
+                return move;
+            } else {
+                std.debug.print("Already occupied. Try again.\n", .{});
+            }
         } else |err| {
             std.debug.print("Error: {}; try again.\n", .{err});
         }
