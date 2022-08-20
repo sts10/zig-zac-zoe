@@ -30,7 +30,8 @@ pub fn main() void {
             std.debug.panic("Error making move!\n", .{});
         };
         presentBoard(board);
-        // checkForWinningPlayer returns an "optional", which I take to be kind of like Rust Options
+        // checkForWinningPlayer returns an "optional", which I take to be kind of like an Option
+        // in Rust.
         // https://ziglearn.org/chapter-1/#optionals
         // Though it looks like you have to check for null _first_?
         var winner = checkForWinningPlayer(board);
