@@ -120,10 +120,17 @@ fn presentBoard(board: [9]u8) void {
     }
 }
 
-const RndGen = std.rand.DefaultPrng;
-var rnd = RndGen.init(0);
 fn pickRandomNumber(max: usize) usize {
-    var number = @mod(rnd.random().int(usize), max);
+
+    var prng = std.rand.DefaultPrng.init(blk: {
+        var seed: u64 = undefined;
+        // Ignoring possible error for code simplicity
+        std.os.getrandom(std.mem.asBytes(&seed)) catch {};
+        break :blk seed;
+    });
+    const rand = prng.random();
+
+    const number = rand.intRangeAtMost(usize, 0, max);
     std.debug.print("Picking {}\n", .{number});
     return number;
 }
