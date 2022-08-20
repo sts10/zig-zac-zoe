@@ -242,14 +242,16 @@ fn askUserForUsize(prompt: []const u8) !usize {
 }
 
 fn askUserForMove(board: [9]u8) usize {
+    // Wonder if there's a better way to structure this loop...
     while (true) {
+        // Zig has no concept of strings! So we use an array of u8s here. Fascinating!
+        const prompt: []const u8 = "Make your move! ";
         // askUserForUsize() may return either an usize or an error (if Zig was unable to
         // parse entered character as a usize).
         // Note: This "either value or error" type is called an "error union type" in Zig
         // https://ziglang.org/documentation/0.9.1/#toc-Error-Union-Type
         // We'll handle it with an if/else.
         // if we got a value (move) back, we'll change validMove to true and return move.
-        const prompt: []const u8 = "Make your move! ";
         if (askUserForUsize(prompt)) |move| {
             // Check if this selected move space is open
             if (isOpen(move, board)) {
