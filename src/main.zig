@@ -27,7 +27,8 @@ pub fn main() void {
             num = ask_user() catch 0;
             // std.debug.print("You entered {}\n", .{num});
         } else {
-            num = findRandomOpenMove(board);
+            // num = findRandomOpenMove(board);
+            num = alfredPick(board);
         }
 
         board = execute_player_move(num, player_number, board);
@@ -96,7 +97,6 @@ fn checkIfBoardIsFull(board: [9]u8) bool {
     for (board) |this_space| {
         board_sum += this_space;
     }
-
     return board_sum == 54;
 }
 
@@ -139,6 +139,64 @@ fn findRandomOpenMove(board: [9]u8) usize {
         }
     }
     return move;
+}
+
+fn isOpen(desired_move: usize, board: [9]u8) bool {
+    if (board[desired_move] == 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// Given 3 usizes representing spaces on the board, find the first that
+// is open
+fn findAnOpenOfThree(a: usize, b: usize, c: usize, board: [9]u8) usize {
+    if (isOpen(a, board)) {
+        return a;
+    } else if (isOpen(b, board)) {
+        return b;
+    } else if (isOpen(c, board)) {
+        return c;
+    } else {
+        return 11; // clearly a cop out... think we're supposed to use an error?
+    }
+}
+
+fn alfredFindLine(board: [9]u8) usize {
+    var sums = calcSums(board);
+    for (sums) |line_sum, i| {
+        if (line_sum == 20) {
+            return i;
+        }
+    }
+    for (sums) |line_sum, i| {
+        if (line_sum == 2) {
+            return i;
+        }
+    }
+    for (sums) |line_sum, i| {
+        if (line_sum == 10) {
+            return i;
+        }
+    }
+    // If no good moves to choose, just pick randomly
+    return findRandomOpenMove(board);
+}
+fn alfredPick(board: [9]u8) usize {
+    var line_we_like = alfredFindLine(board);
+    var alfred_move = switch (line_we_like) {
+        0 => findAnOpenOfThree(2, 4, 6, board),
+        1 => findAnOpenOfThree(0, 3, 6, board),
+        2 => findAnOpenOfThree(1, 4, 7, board),
+        3 => findAnOpenOfThree(2, 5, 8, board),
+        4 => findAnOpenOfThree(0, 4, 8, board),
+        5 => findAnOpenOfThree(6, 7, 8, board),
+        6 => findAnOpenOfThree(3, 4, 5, board),
+        7 => findAnOpenOfThree(0, 1, 2, board),
+        else => findRandomOpenMove(board),
+    };
+    return alfred_move;
 }
 
 // Copied this wholesale from a SO answer. Don't feel good about
