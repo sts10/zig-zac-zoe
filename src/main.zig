@@ -2,7 +2,7 @@
 const std = @import("std");
 
 pub fn main() void {
-    std.debug.print("Let's play... Zig Zac Zoe!\n\n", .{});
+    std.debug.print("Let's play... Zig Zac Zoe!\n", .{});
 
     var board = [9]u8{ 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     presentBoard(board);
@@ -10,13 +10,7 @@ pub fn main() void {
     var game_over = false;
     var turn_number: u8 = 0;
     while (game_over != true) : (turn_number += 1) {
-        // Not sure if this is good Zig...
-        var player_number: u8 = 0;
-        if (turn_number % 2 == 0) {
-            player_number = 1;
-        } else {
-            player_number = 2;
-        }
+        var player_number: u8 = turn_number % 2 + 1;
         var move_to_make: usize = 0;
         if (player_number == 1) {
             move_to_make = askUserForMove(board);
@@ -35,11 +29,11 @@ pub fn main() void {
         // https://ziglearn.org/chapter-1/#optionals
         // Though it looks like you have to check for null _first_?
         var winner = checkForWinningPlayer(board);
-        if (winner != null) {
-            if (winner.? == 1) {
+        if (winner) |value| {
+            if (value == 1) {
                 std.debug.print("Player 1 wins!\n", .{});
                 game_over = true;
-            } else if (winner.? == 2) {
+            } else if (value == 2) {
                 std.debug.print("Player 2 wins!\n", .{});
                 game_over = true;
             }
@@ -114,6 +108,7 @@ fn checkIfBoardIsFull(board: [9]u8) bool {
 
 // Setting void as thje return type basically says we're not going to return anything
 fn presentBoard(board: [9]u8) void {
+    std.debug.print("\n", .{});
     for (board) |space, j| {
         // Could be a match or switch
         if (space == 0) {
