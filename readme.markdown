@@ -5,7 +5,10 @@ Writing a very basic command-line tic-tac-toe game in [Zig](https://ziglang.org)
 Previously, I did this in [Rust](https://github.com/sts10/rusty-tac) and [Go](https://github.com/sts10/tic-tac-go) as [a learning exercise in those two languages](https://sts10.github.io/2017/11/18/trying-go-and-rust.html).
 
 ## Installing Zig
-I went with the snap install (`snap install zig --classic --beta`) as listed in [Zig's GitHub wiki](https://github.com/ziglang/zig/wiki/Install-Zig-from-a-Package-Manager). Running v0.9.1 for now.
+
+**Note**: This program doesn't run correctly with Zig 0.10. It _does_ seem to work just fine with Zig version `0.11.0-dev.632+d69e97ae1`. See [this issue](https://github.com/ziglang/zig/issues/12258) for more.
+
+At the time of this writing, you can install 0.11 by running `snap install zig --classic --edge`, as listed in [Zig's GitHub wiki](https://github.com/ziglang/zig/wiki/Install-Zig-from-a-Package-Manager). I originally wrote this program running v0.9.1.
 
 ## Running this thing
 
