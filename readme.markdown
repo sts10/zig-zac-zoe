@@ -15,8 +15,7 @@ At the time of this writing, you can install 0.11 by running `snap install zig -
 Run my program with `zig build run`. Most of the code work is in `src/main.zig`.
 
 ## Zig resources I found
-* [Official Zig docs for v 0.9.1](https://ziglang.org/documentation/0.9.1/)
-<!-- https://ziglang.org/documentation/master/std/#root -->
+* [Official Zig docs for v 0.9.1](https://ziglang.org/documentation/0.9.1/) <!-- https://ziglang.org/documentation/master/std/#root -->
 * [ziglearn.org](https://ziglearn.org/)
 * [Zig by example](https://zig-by-example.com/)
 * [Ziglings](https://github.com/ratfactor/ziglings) (think this requires an edge version of Zig?)
