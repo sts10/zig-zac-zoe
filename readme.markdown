@@ -6,7 +6,7 @@ Previously, I did this in [Rust](https://github.com/sts10/rusty-tac) and [Go](ht
 
 ## Installing Zig
 
-**Note**: This program doesn't run correctly with Zig 0.10. It _does_ seem to work just fine with Zig version `0.11.0-dev.632+d69e97ae1`. See [this issue](https://github.com/ziglang/zig/issues/12258) for more.
+**Note**: This program doesn't run correctly with Zig 0.10. It _does_ seem to work just fine with Zig version `0.11.0-dev.2967+b643c5dc9`. See [this issue](https://github.com/ziglang/zig/issues/12258) for more.
 
 At the time of this writing, you can install 0.11 by running `snap install zig --classic --edge`, as listed in [Zig's GitHub wiki](https://github.com/ziglang/zig/wiki/Install-Zig-from-a-Package-Manager). I originally wrote this program running v0.9.1.
 
@@ -15,7 +15,8 @@ At the time of this writing, you can install 0.11 by running `snap install zig -
 Run my program with `zig build run`. Most of the code work is in `src/main.zig`.
 
 ## Zig resources I found
-* [Official Zig docs for v 0.9.1](https://ziglang.org/documentation/0.9.1/) <!-- https://ziglang.org/documentation/master/std/#root -->
+* [Official Zig docs for current version of Zig](https://ziglang.org/documentation/master/)
+* [Official Zig docs for v 0.9.1](https://ziglang.org/documentation/0.9.1/) 
 * [ziglearn.org](https://ziglearn.org/)
 * [Zig by example](https://zig-by-example.com/)
 * [Ziglings](https://github.com/ratfactor/ziglings) (think this requires an edge version of Zig?)
