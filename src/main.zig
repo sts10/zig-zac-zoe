@@ -1,11 +1,11 @@
 // Run file with `zig build run`
 const std = @import("std");
 
-pub fn main() void {
+pub fn main() !void {
     std.debug.print("Let's play... Zig Zac Zoe!\n", .{});
 
     var board = [9]u8{ 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    presentBoard(board);
+    try presentBoard(board);
 
     var game_over = false;
     var turn_number: u8 = 0;
@@ -23,7 +23,7 @@ pub fn main() void {
         board = execute_player_move(move_to_make, player_number, board) catch {
             std.debug.panic("Error making move!\n", .{});
         };
-        presentBoard(board);
+        try presentBoard(board);
         // checkForWinningPlayer returns an "optional", which I take to be kind of like an Option
         // in Rust.
         // https://ziglearn.org/chapter-1/#optionals
@@ -107,9 +107,9 @@ fn checkIfBoardIsFull(board: [9]u8) bool {
 }
 
 // Setting void as thje return type basically says we're not going to return anything
-fn presentBoard(board: [9]u8) void {
+fn presentBoard(board: [9]u8) !void {
     std.debug.print("\n", .{});
-    for (board) |space, j| {
+    for (board, 0..) |space, j| {
         // Could be a match or switch
         if (space == 0) {
             std.debug.print("{}", .{j});
@@ -179,17 +179,17 @@ fn findAnOpenOfThree(a: usize, b: usize, c: usize, board: [9]u8) !usize {
 
 fn alfredFindLine(board: [9]u8) usize {
     var sums = calcSums(board);
-    for (sums) |line_sum, i| {
+    for (sums, 0..) |line_sum, i| {
         if (line_sum == 20) {
             return i;
         }
     }
-    for (sums) |line_sum, i| {
+    for (sums, 0..) |line_sum, i| {
         if (line_sum == 2) {
             return i;
         }
     }
-    for (sums) |line_sum, i| {
+    for (sums, 0..) |line_sum, i| {
         if (line_sum == 10) {
             return i;
         }
