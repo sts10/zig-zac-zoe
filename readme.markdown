@@ -19,5 +19,5 @@ Run my program with `zig build run`. Most of the code work is in `src/main.zig`.
 * [Official Zig docs for v 0.9.1](https://ziglang.org/documentation/0.9.1/) 
 * [ziglearn.org](https://ziglearn.org/)
 * [Zig by example](https://zig-by-example.com/)
-* [Ziglings](https://github.com/ratfactor/ziglings) (think this requires an edge version of Zig?)
+* [Ziglings](https://codeberg.org/ziglings/exercises/) (think this requires an edge version of Zig?)
 * [A long video of a beginner Zig programmer who's coming from Rust](https://www.youtube.com/watch?v=O4UYT-brgrc)
