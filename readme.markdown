@@ -4,7 +4,7 @@ Writing a very basic command-line tic-tac-toe game in [Zig](https://ziglang.org)
 
 Previously, I did this in [Rust](https://github.com/sts10/rusty-tac) and [Go](https://github.com/sts10/tic-tac-go) as [a learning exercise in those two languages](https://sts10.github.io/2017/11/18/trying-go-and-rust.html).
 
-## Running this thing
+## Running this program
 
 Once Zig is installed (see below), you should be able to run this program with the following command:
 ```bash
