@@ -10,7 +10,7 @@ pub fn main() !void {
     var game_over = false;
     var turn_number: u8 = 0;
     while (game_over != true) : (turn_number += 1) {
-        var player_number: u8 = turn_number % 2 + 1;
+        const player_number: u8 = turn_number % 2 + 1;
         var move_to_make: usize = 0;
         if (player_number == 1) {
             move_to_make = askUserForMove(board);
@@ -28,7 +28,7 @@ pub fn main() !void {
         // in Rust.
         // https://ziglearn.org/chapter-1/#optionals
         // Though it looks like you have to check for null _first_?
-        var winner = checkForWinningPlayer(board);
+        const winner = checkForWinningPlayer(board);
         if (winner) |value| {
             if (value == 1) {
                 std.debug.print("Player 1 wins!\n", .{});
@@ -178,7 +178,7 @@ fn findAnOpenOfThree(a: usize, b: usize, c: usize, board: [9]u8) !usize {
 }
 
 fn alfredFindLine(board: [9]u8) usize {
-    var sums = calcSums(board);
+    const sums = calcSums(board);
     for (sums, 0..) |line_sum, i| {
         if (line_sum == 20) {
             return i;
@@ -199,8 +199,8 @@ fn alfredFindLine(board: [9]u8) usize {
 }
 
 fn alfredPick(board: [9]u8) !usize {
-    var line_we_like = alfredFindLine(board);
-    var alfred_move = switch (line_we_like) {
+    const line_we_like = alfredFindLine(board);
+    const alfred_move = switch (line_we_like) {
         0 => findAnOpenOfThree(2, 4, 6, board),
         1 => findAnOpenOfThree(0, 3, 6, board),
         2 => findAnOpenOfThree(1, 4, 7, board),
