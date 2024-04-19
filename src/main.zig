@@ -1,4 +1,4 @@
-// Run file with `zig build run`
+// Run this program with `zig build run`
 const std = @import("std");
 
 pub fn main() !void {
@@ -128,13 +128,8 @@ fn presentBoard(board: [9]u8) !void {
 }
 
 fn pickRandomNumber(max: usize) usize {
-    var prng = std.rand.DefaultPrng.init(blk: {
-        var seed: u64 = undefined;
-        // Ignoring possible error for code simplicity
-        std.os.getrandom(std.mem.asBytes(&seed)) catch {};
-        break :blk seed;
-    });
-    const rand = prng.random();
+    // https://cookbook.ziglang.cc/06-01-rand.html
+    const rand = std.crypto.random;
 
     const number = rand.intRangeAtMost(usize, 0, max);
     std.debug.print("Picking {}\n", .{number});
