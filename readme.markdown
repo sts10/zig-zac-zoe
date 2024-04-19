@@ -4,24 +4,25 @@ Writing a very basic command-line tic-tac-toe game in [Zig](https://ziglang.org)
 
 Previously, I did this in [Rust](https://github.com/sts10/rusty-tac) and [Go](https://github.com/sts10/tic-tac-go) as [a learning exercise in those two languages](https://sts10.github.io/2017/11/18/trying-go-and-rust.html).
 
-## Running this program
-
-Once Zig is installed (see below), you should be able to run this program with the following command:
-```bash
-zig build run
-```
-
-This program should work with Zig v0.12 (tested with `v0.12.0-dev.1814+5c0d58b71`).
-
-Note that most of the code work is in `src/main.zig`.
-
 ## Installing Zig
-
 Consult [the Zig GitHub README](https://github.com/ziglang/zig#installation) for installation options. 
 
 I think I installed Zig by running: `snap install zig --classic --edge`, as listed in [Zig's GitHub wiki](https://github.com/ziglang/zig/wiki/install-zig-from-a-package-manager). I originally wrote this program running v0.9.1.
 
+## Running this program
+Once Zig is installed, you should be able to run this program with the following command:
+
+```shell
+zig build run
+```
+
+This program should work with Zig version 0.12 (tested with `v0.12.0-dev.3676+21a6a1b0f`).
+
+Note that most of the code work is in `src/main.zig`.
+
 ## Zig resources I found
+These are potentially out-dated now, but here are some things I used in 2022:
+
 * [Official Zig docs for current version of Zig](https://ziglang.org/documentation/master/)
 * [Official Zig docs for v 0.9.1](https://ziglang.org/documentation/0.9.1/) 
 * [ziglearn.org](https://ziglearn.org/)
