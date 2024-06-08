@@ -16,7 +16,7 @@ Once Zig is installed, you should be able to run this program with the following
 zig build run
 ```
 
-This program should work with Zig version 0.12 (tested with `v0.12.0-dev.3676+21a6a1b0f`).
+This program should work with Zig version 0.13.0, though I haven't tested it thoroughly.
 
 Note that most of the code work is in `src/main.zig`.
 
