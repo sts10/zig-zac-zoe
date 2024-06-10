@@ -26,15 +26,15 @@ pub fn main() !void {
         try presentBoard(board);
         // checkForWinningPlayer returns an "optional", which I take to be kind of like an Option
         // in Rust.
-        // https://ziglearn.org/chapter-1/#optionals
+        // https://zig.guide/language-basics/optionals
         // Though it looks like you have to check for null _first_?
         const winner = checkForWinningPlayer(board);
         if (winner) |value| {
             if (value == 1) {
-                std.debug.print("Player 1 wins!\n", .{});
+                std.debug.print("You win!\n", .{});
                 game_over = true;
             } else if (value == 2) {
-                std.debug.print("Player 2 wins!\n", .{});
+                std.debug.print("Computer wins.\n", .{});
                 game_over = true;
             }
         }
@@ -132,7 +132,7 @@ fn pickRandomNumber(max: usize) usize {
     const rand = std.crypto.random;
 
     const number = rand.intRangeAtMost(usize, 0, max);
-    std.debug.print("Picking {}\n", .{number});
+    // std.debug.print("Picking {}\n", .{number});
     return number;
 }
 
@@ -172,7 +172,7 @@ fn findAnOpenOfThree(a: usize, b: usize, c: usize, board: [9]u8) !usize {
     }
 }
 
-fn alfredFindLine(board: [9]u8) usize {
+fn alfredFindLine(board: [9]u8) ?usize {
     const sums = calcSums(board);
     for (sums, 0..) |line_sum, i| {
         if (line_sum == 20) {
@@ -189,29 +189,34 @@ fn alfredFindLine(board: [9]u8) usize {
             return i;
         }
     }
-    // If no good moves to choose, just pick randomly
-    return findRandomOpenMove(board);
+    // If no good moves to choose, return null and handle up the stack
+    return null;
 }
 
 fn alfredPick(board: [9]u8) !usize {
-    const line_we_like = alfredFindLine(board);
-    const alfred_move = switch (line_we_like) {
-        0 => findAnOpenOfThree(2, 4, 6, board),
-        1 => findAnOpenOfThree(0, 3, 6, board),
-        2 => findAnOpenOfThree(1, 4, 7, board),
-        3 => findAnOpenOfThree(2, 5, 8, board),
-        4 => findAnOpenOfThree(0, 4, 8, board),
-        5 => findAnOpenOfThree(6, 7, 8, board),
-        6 => findAnOpenOfThree(3, 4, 5, board),
-        7 => findAnOpenOfThree(0, 1, 2, board),
-        else => findRandomOpenMove(board),
-    } catch {
-        // alfred_move could be an error (though this will actually never happen because of how alfredFindLine works)
-        // so we catch it here, returning (or "bubbling up") the error to be handled higher up.
-        const err: MoveError = MoveError.NoOpenOfThree;
-        return err;
-    };
-    return alfred_move;
+    const line = alfredFindLine(board);
+    if (line == null) {
+        return findRandomOpenMove(board);
+    } else {
+        // We know line is not null, so we can safely unwrap
+        // it in this switch statement below
+        return switch (line.?) {
+            0 => findAnOpenOfThree(2, 4, 6, board),
+            1 => findAnOpenOfThree(0, 3, 6, board),
+            2 => findAnOpenOfThree(1, 4, 7, board),
+            3 => findAnOpenOfThree(2, 5, 8, board),
+            4 => findAnOpenOfThree(0, 4, 8, board),
+            5 => findAnOpenOfThree(6, 7, 8, board),
+            6 => findAnOpenOfThree(3, 4, 5, board),
+            7 => findAnOpenOfThree(0, 1, 2, board),
+            else => findRandomOpenMove(board),
+        } catch {
+            // alfred_move could be an error (though this will actually never happen because of how alfredFindLine works)
+            // so we catch it here, returning (or "bubbling up") the error to be handled higher up.
+            const err: MoveError = MoveError.NoOpenOfThree;
+            return err;
+        };
+    }
 }
 
 // Copied this wholesale from a SO answer. Don't feel good about it...
@@ -254,8 +259,4 @@ fn askUserForMove(board: [9]u8) usize {
             std.debug.print("Error: {}; try again.\n", .{err});
         }
     }
-}
-
-test "basic test" {
-    try std.testing.expectEqual(10, 3 + 7);
 }

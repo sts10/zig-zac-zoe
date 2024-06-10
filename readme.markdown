@@ -29,3 +29,12 @@ These are potentially out-dated now, but here are some things I used in 2022:
 * [Zig by example](https://zig-by-example.com/)
 * [Ziglings](https://codeberg.org/ziglings/exercises/) (think this requires an edge version of Zig?)
 * [A long video of a beginner Zig programmer who's coming from Rust](https://www.youtube.com/watch?v=O4UYT-brgrc)
+
+## Testing in Zig
+
+Just a note to myself:
+```zig
+test "basic test" {
+    try std.testing.expectEqual(10, 3 + 7);
+}
+```
