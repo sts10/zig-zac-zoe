@@ -17,3 +17,12 @@ for (a) |char| {
     std.debug.print("elem from for loop: {}\n", .{char});
 }
 ```
+
+## Testing in Zig
+
+Just a note to myself:
+```zig
+test "basic test" {
+    try std.testing.expectEqual(10, 3 + 7);
+}
+```
